@@ -8,7 +8,7 @@ check_btc_balance() {
     echo "Query failed. Please check if the address is correct."
     exit 1
   fi
-  btc_balance=$(echo "scale=8; $balance/100000000" | bc)
+  btc_balance=$(awk "BEGIN {print $balance/100000000}")
   echo "BTC Balance: $btc_balance BTC"
 }
 
