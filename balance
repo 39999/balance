@@ -1,37 +1,37 @@
 #!/bin/bash
 
-# 函数：查询BTC余额
+# Function: Check BTC Balance
 check_btc_balance() {
-  read -p "请输入你的BTC地址: " btc_address
+  read -p "Please enter your BTC address: " btc_address
   balance=$(curl -s "https://blockchain.info/q/addressbalance/$btc_address")
   if [ $? -ne 0 ]; then
-    echo "查询失败，请检查地址是否正确。"
+    echo "Query failed. Please check if the address is correct."
     exit 1
   fi
   btc_balance=$(echo "scale=8; $balance/100000000" | bc)
-  echo "BTC余额: $btc_balance BTC"
+  echo "BTC Balance: $btc_balance BTC"
 }
 
-# 函数：查询USDT TRC20余额
+# Function: Check USDT TRC20 Balance
 check_usdt_trc20_balance() {
-  read -p "请输入你的TRON地址: " tron_address
+  read -p "Please enter your TRON address: " tron_address
   balance=$(curl -s "https://apilist.tronscan.org/api/account?address=$tron_address" | jq -r '.trc20token_balances[] | select(.tokenName == "Tether USD") | .balance')
   if [ $? -ne 0 ]; then
-    echo "查询失败，请检查地址是否正确。"
+    echo "Query failed. Please check if the address is correct."
     exit 1
   fi
   if [ -z "$balance" ]; then
-    echo "未查询到USDT TRC20余额，请检查地址是否正确。"
+    echo "No USDT TRC20 balance found. Please check if the address is correct."
   else
-    echo "USDT TRC20余额: $balance"
+    echo "USDT TRC20 Balance: $balance"
   fi
 }
 
-# 主程序
-echo "请选择查询类型: "
-echo "1) BTC 余额"
-echo "2) USDT TRC20 余额"
-read -p "请输入你的选择 (1 或 2): " choice
+# Main program
+echo "Please select the type of balance to check: "
+echo "1) BTC Balance"
+echo "2) USDT TRC20 Balance"
+read -p "Enter your choice (1 or 2): " choice
 
 case $choice in
   1)
@@ -41,7 +41,7 @@ case $choice in
     check_usdt_trc20_balance
     ;;
   *)
-    echo "无效选择，请输入1或2。"
+    echo "Invalid choice. Please enter 1 or 2."
     exit 1
     ;;
 esac
